@@ -58,15 +58,19 @@ exports.createCar = async (req, res, next) => {
   try {
     const pool = getPool();
 
+    const { marca, modelo, precio, color, cv } = req.body;
+
+    if (!marca || !modelo || !precio || !color || !cv) {
+      res.status(400).json({
+        status: "error",
+        message: "Faltan datos para crear el coche",
+      });
+      return;
+    }
+
     const [result] = await pool.query(
       "INSERT INTO coches (marca, modelo, precio, color, cv) VALUES (?, ?, ?, ?, ?)",
-      [
-        req.body.marca,
-        req.body.modelo,
-        req.body.precio,
-        req.body.color,
-        req.body.cv,
-      ]
+      [marca, modelo, precio, color, cv]
     );
 
     if (result.affectedRows === 0) {
@@ -81,11 +85,11 @@ exports.createCar = async (req, res, next) => {
       status: "ok",
       message: "Coche creado correctamente",
       data: {
-        marca: req.body.marca,
-        modelo: req.body.modelo,
-        precio: req.body.precio,
-        color: req.body.color,
-        cv: req.body.cv,
+        marca,
+        modelo,
+        precio,
+        color,
+        cv,
       },
     });
   } catch (err) {
@@ -97,16 +101,19 @@ exports.updateCarById = async (req, res, next) => {
   try {
     const pool = getPool();
 
+    const { marca, modelo, precio, color, cv } = req.body;
+
+    if (!marca || !modelo || !precio || !color || !cv) {
+      res.status(400).json({
+        status: "error",
+        message: "Faltan datos para actualizar el coche",
+      });
+      return;
+    }
+
     const [result] = await pool.query(
       "UPDATE coches SET marca = ?, modelo = ?, precio = ?, color = ?, cv = ? WHERE id = ?",
-      [
-        req.body.marca,
-        req.body.modelo,
-        req.body.precio,
-        req.body.color,
-        req.body.cv,
-        req.params.id,
-      ]
+      [marca, modelo, precio, color, cv, req.params.id]
     );
 
     if (result.affectedRows === 0) {
@@ -121,11 +128,11 @@ exports.updateCarById = async (req, res, next) => {
       status: "ok",
       message: "Coche actualizado correctamente",
       data: {
-        marca: req.body.marca,
-        modelo: req.body.modelo,
-        precio: req.body.precio,
-        color: req.body.color,
-        cv: req.body.cv,
+        marca,
+        modelo,
+        precio,
+        color,
+        cv,
       },
     });
   } catch (err) {
