@@ -1,11 +1,8 @@
 require("dotenv").config();
-const mysql = require("mysql2/promise");
-const getPool = require("./getPool");
+const pool = require("./getPool")();
 
 const initDB = async () => {
   try {
-    const pool = getPool();
-
     await pool.query(`DROP TABLE IF EXISTS coches;`);
 
     console.log("Creando tabla coches...");

@@ -1,9 +1,7 @@
-const getPool = require("../../database/getPool");
+const pool = require("../../database/getPool")();
 
 exports.getCars = async (req, res, next) => {
   try {
-    const pool = getPool();
-
     const [result] = await pool.query(
       "SELECT * FROM coches WHERE marca LIKE ? AND modelo LIKE ? AND precio BETWEEN ? AND ? AND color LIKE ? AND cv BETWEEN ? AND ? ORDER BY marca, modelo",
       [
@@ -34,8 +32,6 @@ exports.getCars = async (req, res, next) => {
 
 exports.getCarById = async (req, res, next) => {
   try {
-    const pool = getPool();
-
     const [result] = await pool.query("SELECT * FROM coches WHERE id = ?", [
       req.params.id,
     ]);
@@ -56,8 +52,6 @@ exports.getCarById = async (req, res, next) => {
 
 exports.createCar = async (req, res, next) => {
   try {
-    const pool = getPool();
-
     const { marca, modelo, precio, color, cv } = req.body;
 
     if (!marca || !modelo || !precio || !color || !cv) {
@@ -99,8 +93,6 @@ exports.createCar = async (req, res, next) => {
 
 exports.updateCarById = async (req, res, next) => {
   try {
-    const pool = getPool();
-
     const { marca, modelo, precio, color, cv } = req.body;
 
     if (!marca || !modelo || !precio || !color || !cv) {
@@ -142,8 +134,6 @@ exports.updateCarById = async (req, res, next) => {
 
 exports.deleteCarById = async (req, res, next) => {
   try {
-    const pool = getPool();
-
     const [result] = await pool.query("DELETE FROM coches WHERE id = ?", [
       req.params.id,
     ]);
